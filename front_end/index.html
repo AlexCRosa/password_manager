@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css"/>
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <style>
+        label {
+            display: block;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager</title>
+</head>
+
+<body>
+
+    <h1>Welcome to the Password Manager</h1>
+    <h3>This is a tool for helping users create and safely store password.</h3>
+
+
+    <form>
+
+        <p>Users have the option to decide the strength of their password. What type of password do you want?</p>
+        <input type="checkbox" name="password_strength" id="weak">Weak<br>
+        <input type="checkbox" name="password_strength" id="strong">Strong<br>
+
+        <p>How many characters do you want in your password?</p>
+        <input type="number" name="password_length" id="password_length" maxlength="40">    
+
+        <button type="button" id="submit">Create Password</button>
+
+        <label for="new_password">Your password:  </label> <div name="new_password" id="new_password"></div>
+    </form>
+
+    <py-script>
+        from pyscript import when
+        import string
+        import random
+    
+        @when("click", selector="#submit")
+        def handle_click(event):
+            password_length = int(Element("password_length").value)
+            new_password = Element("new_password")
+    
+            selected_option = None
+            if Element("strong").prop("checked") is not None and Element("strong").prop("checked"):
+                selected_option = "strong"
+            elif Element("weak").prop("checked") is not None and Element("weak").prop("checked"):
+                selected_option = "weak"
+    
+            if not selected_option:
+                console.log("Please select either a strong or weak password.")
+                return
+    
+            password_characters = string.ascii_letters + string.digits
+            if selected_option == "strong":
+                password_characters += string.punctuation
+    
+            password = []
+            for _ in range(password_length):
+                password.append(random.choice(password_characters))
+    
+            new_password.write("".join(password))
+    </py-script>
+    
+    
+
+</body>
+
+</html>
