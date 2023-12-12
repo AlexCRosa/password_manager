@@ -5,11 +5,25 @@
     <title>Password Manager</title>
 </head>
 <body>
-    <form method="POST" action="/process">
-        <label for="input_data">How many characters:</label>
-        <input type="text" id="input_data" name="input_data">
-        <button type="submit">Submit</button>
-        <label for="message">{{ message }}</label>
-    </form>
+
+  <form method="POST" action="/process">
+      Password length: <input type="number" id="input_data" name="input_data">
+      <button type="submit">Submit</button>
+      <label for="message">{{ message }}</label>
+  </form>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% block body %}{% endblock %}
+
+  <p>{{ password }}</p>
+
 </body>
 </html>
