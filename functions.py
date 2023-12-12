@@ -5,9 +5,9 @@ import time
 def main():
 
     # Get requirements from user to create the password
-    def password_length():
+    def password_length(length):
         while True:
-            amount_characters = input("How many characters the password must have? ")
+            amount_characters = length
             # Making sure the user's input is an integer
             try:
                 return int(amount_characters)
@@ -74,7 +74,8 @@ def main():
         return weak_password
 
     # Generator STRONG PASSWORD logic
-    def strong_password_generator():
+    def strong_password_generator(length):
+        amount_characters = length
         characters_counter = 0
         password = ""
 

@@ -6,12 +6,26 @@
 </head>
 <body>
 
-  <form method="POST" action="/process">
-      Password length: <input type="number" id="input_data" name="input_data">
-      <button type="submit">Submit</button>
-      <label for="message">{{ message }}</label>
+  <h1>Welcome to the Password Manager</h1>
+  <h3>This is a tool for helping users create and safely store password.</h3>
+
+  <form method="POST" action="/process">    
+    <label for="input_data">Password length: </label><input type="text" id="input_data" name="length_data"></br></br>
+    
+    <!--Dropdown to select between add symbols or not-->
+    <label for="input_data">Do you want to include symbols?</label>
+      <select name="strength_data" id="input_data">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select></br></br>
+      
+    <button type="submit">Submit</button>
+
+    <!--Message for invalid user's input-->
+    <label for="message">{{ message }}</label>
   </form>
 
+  <!--Flask FLASH code to call the message for invalid user's input-->
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul class=flashes>
@@ -23,7 +37,9 @@
   {% endwith %}
   {% block body %}{% endblock %}
 
+<!--Created just to check if data were correctly processed-->
   <p>{{ password }}</p>
+  <p>{{ symbols }}</p>
 
 </body>
 </html>
