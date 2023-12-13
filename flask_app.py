@@ -8,14 +8,18 @@ app.config['SECRET_KEY'] = '12345'
 def index():
     return render_template('index.html')
 
-@app.route('/process', methods=['POST'])
-def process():
+@app.route('/main', methods=['POST'])
+def main():
+    return render_template('main.html')
+
+@app.route('/password-creator', methods=['POST'])
+def password_creator():
     # Check if password length is number
     try:
         input_data = int(request.form['length_data'])
     except ValueError:
         flash("Invalid input.")
-        return redirect('/')
+        return redirect('password-creator')
 
     # Verify if symbols should be included
     if request.form['strength_data'] == "yes":
