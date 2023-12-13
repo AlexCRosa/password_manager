@@ -10,7 +10,12 @@ def index():
 
 @app.route('/main', methods=['POST'])
 def main():
-    return render_template('main.html')
+    menu_option = request.form['menu_option']
+
+    if menu_option == 'password_creator':
+        return render_template('password-creator.html')
+    elif menu_option == 'new_account':
+        return render_template('create-account.html')
 
 @app.route('/password-creator', methods=['POST'])
 def password_creator():
@@ -19,17 +24,24 @@ def password_creator():
         input_data = int(request.form['length_data'])
     except ValueError:
         flash("Invalid input.")
-        return redirect('password-creator')
+        return redirect('main')
+    
+    # Need to fix it
+    if input_data == None:
+        flash("Password length missing.")
+        return redirect('main')
+    if request.form['strength_data'] == None:
+        flash("Decide between include symbols or not.")
+        return redirect('main')
+    
+    symbols_question = request.form['strength_data']
 
-    # Verify if symbols should be included
-    if request.form['strength_data'] == "yes":
+    if  symbols_question == "yes":
         generated_password = strong_password_generator(input_data)
-        include_symbols = "Yes"
-    elif request.form['strength_data'] == "no":
+    elif symbols_question == "no":
         generated_password = weak_password_generator(input_data)
-        include_symbols = "No"
 
-    return render_template('index.html', password=generated_password, symbols=include_symbols)
+    return render_template('password-creator.html', password=generated_password)
 
 if __name__ == '__main__':
     app.run(debug=True)
