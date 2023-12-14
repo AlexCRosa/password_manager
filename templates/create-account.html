@@ -4,19 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Manager - Create Account</title>
+
+    {% extends "base.html" %}
+    {% block title %}Password Creator Page{% endblock %}
 </head>
 <body>
-    <h1>Password Manager</h1>
+    {% block content %}
+    
     <h3>New Account</h3></br>
     
-    <form action="/create-account" method="POST">
-        <label for="input_data">Name: </label><input type="text" name="user_name" id="input_data"></br></br>
-        <label for="input_data">E-mail: </label><input type="text" name="user_name" id="input_data"></br></br>
-        <label for="input_data">Password: </label><input type="text" name="user_name" id="input_data"></br></br>
-            
-        <button type="submit">Submit</button>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">       
+        <form action="/create-account" method="POST">
+            <label for="input_data">Name: </label><input type="text" name="user_name" id="input_data"></br></br>
+            <label for="input_data">E-mail: </label><input type="text" name="user_name" id="input_data"></br></br>
+            <label for="input_data">Password: </label><input type="text" name="user_name" id="input_data"></br></br>
+                
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
 
-    </form>
+        </form>
+    </div>
+
+
+    {% endblock %}
 
 </body>
 </html>

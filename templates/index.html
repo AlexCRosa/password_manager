@@ -13,13 +13,16 @@
   <h1>Welcome to the Password Manager</h1>
   <h3>This is a tool for helping users create and safely store password.</h3>
 
-  <form method="POST" action="/main">    
-    <button type="submit" name="menu_option" value="password_creator">Password Creator</button>
-  </form></br>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+    <form method="POST" action="/main">    
+      <button type="submit" class="btn btn-primary btn-lg" name="menu_option" value="password_creator">Password Creator</button>
+    </form></br>
 
-  <form method="POST" action="/main">    
-    <button type="submit" name="menu_option" value="new_account">New Account</button>
-  </form>  
+    <form method="POST" action="/main">    
+      <button type="submit" class="btn btn-primary btn-lg" name="menu_option" value="new_account">New Account</button>
+    </form>
+  </div>  
+
   {% endblock %}
 </body>
 </html>
