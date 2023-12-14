@@ -8,6 +8,7 @@ app.config['SECRET_KEY'] = '12345'
 def index():
     return render_template('index.html')
 
+
 @app.route('/main', methods=['POST'])
 def main():
     menu_option = request.form['menu_option']
@@ -22,26 +23,33 @@ def password_creator():
     # Check if password length is number
     try:
         input_data = int(request.form['length_data'])
+        if input_data:
+            pass
     except ValueError:
-        flash("Invalid input.")
-        return redirect('main')
-    
-    # Need to fix it
-    if input_data == None:
-        flash("Password length missing.")
-        return redirect('main')
-    if request.form['strength_data'] == None:
-        flash("Decide between include symbols or not.")
-        return redirect('main')
-    
-    symbols_question = request.form['strength_data']
+        flash("Password length invalid.")
+        return render_template('password-creator.html') 
 
-    if  symbols_question == "yes":
+    try:
+        include_symbols = request.form['strength_data']
+        if include_symbols:
+            pass
+    except:
+        flash("Decide between include symbols or not.")
+        return render_template('password-creator.html') 
+
+    if  include_symbols == "yes":
         generated_password = strong_password_generator(input_data)
-    elif symbols_question == "no":
+    elif include_symbols == "no":
         generated_password = weak_password_generator(input_data)
 
     return render_template('password-creator.html', password=generated_password)
+
+@app.route('/create-account', methods=['POST'])
+def create_account():
+    menu_option = request.form['menu_option']
+
+    if menu_option == 'new_account':
+        return render_template('create-account.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
