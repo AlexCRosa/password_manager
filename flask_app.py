@@ -18,6 +18,18 @@ def main():
     elif menu_option == 'new_account':
         return render_template('create-account.html')
 
+@app.route('/login')
+def login():
+    return render_template('login-page.html')
+
+@app.route('/create-password')
+def create_password():
+    return render_template('password-creator.html')
+
+@app.route('/new-account')
+def new_account():
+    return render_template('create-account.html')
+
 @app.route('/password-creator', methods=['POST'])
 def password_creator():
     # Check if password length is number
