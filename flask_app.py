@@ -30,6 +30,10 @@ def create_password():
 def new_account():
     return render_template('create-account.html')
 
+@app.route('/my-account')
+def my_account():
+    return render_template('user-account.html')
+
 @app.route('/password-creator', methods=['POST'])
 def password_creator():
     # Check if password length is number

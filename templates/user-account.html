@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager - My Account</title>
+
+    {% extends "base.html" %}
+    {% block title %}My Account Page{% endblock %}
+</head>
+<body>
+    {% block content %}
+    
+    <div class="container justify-content-center">
+        <h3>My Account</h3><br>
+
+        <h6>Wellcome /FULL_NAME</h6><br><br>
+
+
+        <h6>Stored Passwords</h6>
+
+        <table class="table table-primary">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <th scope="row">1</th>
+                <td>mark@example.com</td>
+                <td>password</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>jacob@example.com</td>
+                <td>password</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>larry@example.com</td>
+                <td>password</td>
+              </tr>
+            </tbody>
+          </table>
+    
+    </div>
+
+    
+
+    {% endblock %}
+</body>
+</html>
