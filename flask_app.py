@@ -1,14 +1,18 @@
 from flask import *
 from functions import *
 from flask_sqlalchemy import SQLAlchemy
+from datetime import timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
+app.permanent_session_lifetime = timedelta(hours=10)
+'''
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://users.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# Defining database information
 class users(db.Model):
     _id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column(db.string(100))
@@ -17,11 +21,12 @@ class users(db.Model):
     def __init__(self, name, email):
         self.name = name
         self.email = email
+'''
 
+        
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/main', methods=['POST'])
 def main():
@@ -47,6 +52,24 @@ def new_account():
 @app.route('/my-account')
 def my_account():
     return render_template('user-account.html')
+
+@app.route('/logout')
+def logout():
+    session.pop("user", None)
+    return redirect(url_for('login'))
+
+@app.route('/login-page')
+def login_page():
+    if request.method == "POST":
+        session.permanent = True
+        user = request.form['username']
+        session["my-account"] = user
+        return redirect(url_for("my-account"))
+    else:
+        if "user" in session:
+            return redirect(url_for("my-account"))
+        return render_template('login-page.html')
+
 
 @app.route('/password-creator', methods=['POST'])
 def password_creator():
@@ -82,5 +105,5 @@ def create_account():
         return render_template('create-account.html')
 
 if __name__ == '__main__':
-    db.create_all()
+    # db.create_all()
     app.run(debug=True)
