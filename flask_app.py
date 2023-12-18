@@ -1,8 +1,22 @@
 from flask import *
 from functions import *
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://users.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+class users(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    name = db.Column(db.string(100))
+    email = db.Column(db.string(100))
+
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
 
 @app.route('/')
 def index():
@@ -68,4 +82,5 @@ def create_account():
         return render_template('create-account.html')
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(debug=True)
