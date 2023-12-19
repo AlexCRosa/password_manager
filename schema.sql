@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS account_pannel;
+
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE account_pannel (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT,
+  password TEXT NOT NULL,
+  website TEXT
+);

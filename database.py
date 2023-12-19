@@ -1,38 +1,41 @@
 import sqlite3
 
-connection = sqlite3.connect('db.db')
-cursor = connection.cursor()
+import click
+from flask import current_app, g
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
-               name TEXT, 
-               email TEXT UNIQUE, 
-               password TEXT
-               )''')
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
 
-"""
-Try to create a variable to store the input received from the 'create-account' page
-data = [("User Full Name", "example@email.com", "P@55w0rd")]
-try:
-    cursor.executemany('''
-        INSERT INTO users (name, email, password) VALUES (?, ?, ?)', data)
-except sqlite3.IntegrityError: 
-    print("Do something)
-"""
+    return g.db
 
-try:
-    cursor.executemany("""
-        INSERT INTO users (name, email, password) VALUES (?, ?, ?)
-    """, [
-        ('Alex Cesar Rosa', 'alex_cesar20@hotmail.com', '123456'),
-        ('Ana Flavia dos Santos Oliveira', 'anaflavia_soliveira@hotmail.com', '987654321'),
-        ('Sofia Pereira Rosa', 'sofia@google.com', 'Sofi@123456')
-    ])
-    connection.commit()
-except sqlite3.IntegrityError:
-    print("User already exists.")
 
-result = cursor.execute("SELECT id, name FROM users")
-print(result.fetchall())
+def close_db(e=None):
+    db = g.pop('db', None)
 
-connection.close()
+    if db is not None:
+        db.close()
+
+def init_db():
+    db = get_db()
+
+    with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
+
+@click.command('init-db')
+def init_db_command():
+    """Clear the existing data and create new tables."""
+    init_db()
+    click.echo('Initialized the database.')
+
+def init_app(app):
+    """Register database functions with the Flask app. This is called by
+    the application factory.
+    """
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
