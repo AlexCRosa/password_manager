@@ -13,7 +13,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                )''')
 
 """
-Try to create a variable to store the input received from the 'create-account' page
+Create a variable to store the input received from the 'create-account' page because it is easier to handle the data
 data = [("User Full Name", "example@email.com", "P@55w0rd")]
 try:
     cursor.executemany('''
