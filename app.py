@@ -96,5 +96,14 @@ def create_account():
     Session = sessionmaker(bind=engine)
     session = Session()  
 
+    new_user = User(
+        name=request.form['user_name'], 
+        email=request.form['user_email'], 
+        password=request.form['user_password'],
+        website="")
+
+    session.add(new_user)
+    session.commit()
+
 if __name__ == '__main__':
     app.run(debug=True)

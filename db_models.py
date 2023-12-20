@@ -16,8 +16,11 @@ class User(Base):
     password = Column(String(100), nullable=False)
     website = Column(String)
 
-    def __init__(self, name, email):
+    def __init__(self, name, email, password, website):
         self.name = name
         self.email = email
+        self.password = password
+        self.website = website
+
 
 Base.metadata.create_all(engine)
