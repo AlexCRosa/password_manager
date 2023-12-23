@@ -1,12 +1,15 @@
 from flask import *
 from functions import *
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 from datetime import timedelta
 from db_models import User, engine
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
+
+# ---------- Verify the necessity of this code
 app.permanent_session_lifetime = timedelta(hours=10)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -93,17 +96,19 @@ def password_creator():
 # ---------- New Account Page ----------
 @app.route('/create-account', methods=['POST'])
 def create_account():
-    Session = sessionmaker(bind=engine)
-    session = Session()  
-
-    new_user = User(
+    with Session(engine) as session:
+        new_user = User(
         name=request.form['user_name'], 
         email=request.form['user_email'], 
         password=request.form['user_password'],
-        website="")
+        )
 
     session.add(new_user)
     session.commit()
+    session.close
+
+    time.sleep(2)
+    return render_template('user-account.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

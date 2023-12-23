@@ -1,26 +1,35 @@
-from sqlalchemy import Column, Integer, MetaData, String, Table, create_engine
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import MetaData
+from sqlalchemy import String
+from sqlalchemy import Table
+from sqlalchemy import create_engine
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from typing import List
+from typing import Optional
 
 db_url = 'sqlite:///database.db'
 
-engine = create_engine(db_url)
+engine = create_engine(db_url, echo=True)
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user_account"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100))
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(100), nullable=False)
-    website = Column(String)
 
-    def __init__(self, name, email, password, website):
+    def __init__(self, name, email, password):
         self.name = name
         self.email = email
         self.password = password
-        self.website = website
-
 
 Base.metadata.create_all(engine)
