@@ -2,9 +2,9 @@ from flask import *
 from functions import *
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 from datetime import timedelta
 from db_models import User, engine
-import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
@@ -103,12 +103,15 @@ def create_account():
         password=request.form['user_password'],
         )
 
-    session.add(new_user)
-    session.commit()
-    session.close
-
-    time.sleep(2)
-    return render_template('user-account.html')
+    try:
+        session.add(new_user)
+        session.commit()
+        session.close
+        flash("Account created successfully.")
+        return render_template('login-page.html')
+    except:
+        flash("User already exists.")
+        return render_template('create-account.html')  
 
 if __name__ == '__main__':
     app.run(debug=True)
