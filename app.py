@@ -75,7 +75,7 @@ def password_creator():
         if input_data:
             pass
     except ValueError:
-        flash("Password length invalid.")
+        flash("Password length invalid.", "warning")
         return render_template('password-creator.html') 
 
     try:
@@ -83,7 +83,7 @@ def password_creator():
         if include_symbols:
             pass
     except:
-        flash("Decide between include symbols or not.")
+        flash("Please answer 'YES' or 'NO' for including symbols.", "warning")
         return render_template('password-creator.html') 
 
     if  include_symbols == "yes":
@@ -107,10 +107,10 @@ def create_account():
         session.add(new_user)
         session.commit()
         session.close
-        flash("Account created successfully.")
+        flash("Account created successfully.", "success")
         return render_template('login-page.html')
     except:
-        flash("User already exists.")
+        flash("User already exists.", "warning")
         return render_template('create-account.html')  
 
 if __name__ == '__main__':
