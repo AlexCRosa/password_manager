@@ -64,7 +64,7 @@ def weak_password_generator(length):
         password += random.choice(string.ascii_letters + string.digits)
         characters_counter += 1
 
-    return f"The generated password is: {password}"
+    return password
 
 # Generator STRONG PASSWORD logic
 def strong_password_generator(length):
@@ -77,7 +77,7 @@ def strong_password_generator(length):
         password += random.choice(string.ascii_letters + string.digits + string.punctuation)
         characters_counter += 1
 
-    return f"The generated password is: {password}"
+    return password
 
 def check_path(password_type):
     if password_type.lower() == "weak":

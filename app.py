@@ -91,7 +91,7 @@ def password_creator():
     elif include_symbols == "no":
         generated_password = weak_password_generator(input_data)
 
-    return render_template('password-creator.html', password=generated_password)
+    return render_template('password-creator.html', password=generated_password, msg="The generated password is: ")
 
 # ---------- New Account Page ----------
 @app.route('/create-account', methods=['POST'])
