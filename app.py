@@ -3,15 +3,14 @@ from functions import *
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from datetime import timedelta
 from db_models import User, engine
+import flask_login
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
 
 # ---------- Verify the necessity of this code
-app.permanent_session_lifetime = timedelta(hours=10)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -54,6 +53,13 @@ def logout():
 # ---------- Pages navigation ----------
 
 # ---------- Login Page ----------
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def user_loader(id):
+    return User.get(id)
+
 @app.route('/login-page')
 def login_page():
     if request.method == "POST":
@@ -100,7 +106,7 @@ def create_account():
         new_user = User(
         name=request.form['user_name'], 
         email=request.form['user_email'], 
-        password=request.form['user_password'],
+        password=generate_password_hash(request.form['user_password'])
         )
 
     try:
