@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager - Create Account</title>
+
+    {% extends "base.html" %}
+    {% block title %}New Account Page{% endblock %}
+</head>
+<body>
+    {% block content %}
+    
+    <h3>New Account</h3></br>
+
+    <div class="container">
+        <form action="/create-account" method="POST">
+            
+            <div class="form-group row"> 
+                <!--Name--> 
+                <div class="row g-3 align-items-center">
+                    <div class="col-sm-1">
+                        <label for="input_data" class="col-form-label">Full Name:</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="input_data" name="user_name">
+                    </div>
+                </div> 
+    
+
+                <!--Email-->
+                <div class="row g-3 align-items-center">
+                    <div class="col-sm-1">
+                        <label for="input_data" class="col-form-label">E-mail:</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="email" class="form-control" id="input_data" placeholder="name@example.com" name="user_email">
+                    </div>
+                </div> 
+
+                <!--Password-->
+                <div class="row g-3 align-items-center">
+                    <div class="col-sm-1">
+                        <label for="input_data" class="col-form-label">Password:</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="text" id="input_data" class="form-control" aria-describedby="passwordHelpInline" name="user_password1">
+                        Your password must have at least 10 characters.
+                    </div>
+                </div> 
+
+                <div class="row g-3 align-items-center">
+                    <div class="col-sm-1">
+                        <label for="input_data" class="col-form-label">Confirm Password:</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="text" id="input_data" class="form-control" aria-describedby="passwordHelpInline" name="user_password2">
+                    </div>
+                </div> 
+
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary btn-lg">Create New Account</button>
+
+            <!-- NEED TO FIX THE LINK-->
+            <span>
+                Already have an account?
+                <a href="/password-creator">Login</a>
+            </span>
+
+        </form>
+
+    {% endblock %}
+
+</body>
+</html>
