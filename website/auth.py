@@ -6,7 +6,34 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
-# ---------- New Account Page ----------
+# ---------- Login ----------
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('username')
+        password = request.form.get('password')
+
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password, password):
+                flash("Login Succesful.", "success")
+                login_user(user, remember=True)
+                return redirect(url_for('views.profile'))
+            else:
+                flash("Incorrect password.", "warning")
+        else:
+            flash("User does not exists.", "warning")
+
+    return render_template("login-page.html", user=current_user)
+
+# ---------- Logout ----------
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
+
+# ---------- Sign up ----------
 @auth.route('/create-account', methods=['POST'])
 def create_account():
     name=request.form['user_name']
@@ -34,4 +61,4 @@ def create_account():
             flash("User already exists.", "warning")
             return redirect(url_for('views.new_account'))     
 
-    return render_template('create-account.html')
+    return render_template('create-account.html', user=current_user)

@@ -9,28 +9,35 @@ views = Blueprint('views', __name__)
 # ---------- Pages navigation ----------
 @views.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', user=current_user)
 
-@views.route('/main', methods=['POST'])
+@views.route('/', methods=['GET', 'POST'])
 def main():
-    menu_option = request.form['menu_option']
+    if request.method == 'POST':
+        menu_option = request.form['menu_option']
 
-    if menu_option == 'password_creator':
-        return render_template('password-creator.html')
-    elif menu_option == 'new_account':
-        return render_template('create-account.html')
+        if menu_option == 'password_creator':
+            return render_template('password-creator.html', user=current_user)
+        elif menu_option == 'new_account':
+            return render_template('create-account.html', user=current_user)
+    
+    return render_template('index.html', user=current_user)
 
 @views.route('/login')
 def login():
-    return render_template('login-page.html')
+    return render_template('login-page.html', user=current_user)
 
 @views.route('/create-password')
 def create_password():
-    return render_template('password-creator.html')
+    return render_template('password-creator.html', user=current_user)
 
 @views.route('/new-account')
 def new_account():
-    return render_template('create-account.html')
+    return render_template('create-account.html', user=current_user)
+
+@views.route('/profile')
+def profile():
+    return render_template('user-account.html', user=current_user)
 
 # ---------- Password Creator Page ----------
 from .functions import weak_password_generator, strong_password_generator

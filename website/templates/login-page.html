@@ -12,7 +12,7 @@
     {% block content %}
 
     <div class="container min-vh-100 d-sm-block col-sm-3 justify-content-center">
-        <form>
+        <form action="{{ url_for('auth.login') }}" method="POST">
             <!-- Email input -->
             <div class="form-outline mb-4">
               <input type="email" id="form2Example1" class="form-control" name="username"/>
