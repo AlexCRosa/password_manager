@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Storage
 from . import db
-import json
+from werkzeug.security import generate_password_hash 
 
 views = Blueprint('views', __name__)
 
@@ -74,3 +74,37 @@ def password_creator():
         generated_password = weak_password_generator(input_data)
 
     return render_template('password-creator.html', password=generated_password, msg="The generated password is: ")
+
+# ---------- Add new password (User Enviroment) ----------
+@views.route('/add-password', methods=['GET', 'POST'])
+@login_required
+def add_password():
+    if request.method == 'POST':
+        # Extract form data
+        username = request.form['username']
+        website = request.form['website']
+        
+        # Check for auto generate password
+        auto_generate = request.form.get('auto_generate', 'no')
+
+        # Create a new instance of the Storage model
+        if auto_generate == "yes":
+            password = strong_password_generator(16)
+            new_password = Storage(username=username, 
+                                   password=generate_password_hash(password), 
+                                   website=website, 
+                                   user_id=current_user.id)
+        else:
+            password = request.form['password']
+            new_password = Storage(username=username, 
+                                   password=generate_password_hash(password), 
+                                   website=website, 
+                                   user_id=current_user.id)    
+
+        # Add the new instance to the database session
+        db.session.add(new_password)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        return redirect(url_for('views.profile')) 
