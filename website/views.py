@@ -46,6 +46,14 @@ def new_account():
 def profile():
     return render_template('user-account.html', user=current_user)
 
+# ---------- Manage Password Page ----------
+@views.route('/manage-stored-passwords', methods=['GET', 'POST'])
+@login_required
+def manage_stored_passwords():
+    # Query stored passwords for the current user
+    stored_passwords = Storage.query.filter_by(user_id=current_user.id).all()
+    return render_template('user-account.html', user=current_user, stored_passwords=stored_passwords, manage_pwd_popup=True)
+
 # ---------- Password Creator Page ----------
 from .functions import weak_password_generator, strong_password_generator
 
@@ -91,13 +99,13 @@ def add_password():
         if auto_generate == "yes":
             password = strong_password_generator(16)
             new_password = Storage(username=username, 
-                                   password=generate_password_hash(password), 
+                                   password=password, 
                                    website=website, 
                                    user_id=current_user.id)
         else:
             password = request.form['password']
             new_password = Storage(username=username, 
-                                   password=generate_password_hash(password), 
+                                   password=password, 
                                    website=website, 
                                    user_id=current_user.id)    
 

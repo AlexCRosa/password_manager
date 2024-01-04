@@ -17,7 +17,7 @@
         <h6>Wellcome {{ user.name }}</h6><br><br>
 
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <form method="POST" action="/">    
+          <form method="POST" action="{{ url_for('views.manage_stored_passwords') }}">    
             <button type="submit" class="btn btn-primary btn-lg" name="menu_option" value="manage_stored_passwords">Manage Stored Passwords</button>
           </form></br>
       
@@ -30,38 +30,27 @@
         {% if manage_pwd_popup %}
         <div id="popup" class="alert alert-dismissible fade show" role="alert">
           <h6>Stored Passwords</h6>
-          <table class="table table-primary">
+          <table class="table table-primary">          
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Username</th>
-                <th scope="col">Password</th>
-                <th scope="col">Website</th>
+                  <th>Username</th>
+                  <th>Password</th>
+                  <th>Website</th>
               </tr>
             </thead>
-            <tbody class="table-group-divider">
-              <tr>
-                <th scope="row">1</th>
-                <td>mark@example.com</td>
-                <td><td>nyt.com</td></td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>jacob@example.com</td>
-                <td>password</td>
-                <td>google.com</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>larry@example.com</td>
-                <td>password</td>
-                <td>apple.com</td>
-              </tr>
-            </tbody>
-        </table>
+            <tbody>
+                {% for password in stored_passwords %}
+                    <tr>
+                        <td>{{ password.username }}</td>
+                        <td>{{ password.password }}</td>
+                        <td>{{ password.website }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>                       
+          </table>
 
-        <!-- Pop up 'Close' button -->
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <!-- Pop up 'Close' button -->
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
         </div>
       {% endif %}
