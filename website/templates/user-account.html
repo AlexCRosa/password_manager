@@ -16,10 +16,70 @@
 
         <h6>Wellcome {{ user.name }}</h6><br><br>
 
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <form method="POST" action="/">    
+            <button type="submit" class="btn btn-primary btn-lg" name="menu_option" value="manage_stored_passwords">Manage Stored Passwords</button>
+          </form></br>
+      
+          <form method="POST" action="/">    
+            <button type="submit" class="btn btn-primary btn-lg" name="menu_option" value="store_new_password">Store a New Password</button>
+          </form>
+        </div> 
 
-        <h6>Stored Passwords</h6>
+      {% if new_pwd_popup %}
+        <div id="popup" class="alert alert-dismissible fade show" role="alert">
+          <form action="{{ url_for('auth.login') }}" method="POST">
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form2Example1">Username</label>
+              <input type="email" id="form2Example1" class="form-control" name="username"/>
+            </div>
+          
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form2Example2">Password</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="autoGenerateCheckbox" name="auto_generate" value="yes">
+                    <label class="form-check-label" for="autoGenerateCheckbox">
+                        Auto Generate Password
+                    </label>
+              </div><br>
+              <input type="password" id="form2Example2" class="form-control" name="password"/>
+            </div>
 
-        <table class="table table-primary">
+            <!-- Website/URL input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form2Example2">Website</label><em style="color: grey"> (Optional)</em>
+              <input type="password" id="form2Example2" class="form-control" name="password"/>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>
+
+            <!-- Pop up 'Close' button -->
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </form>
+        </div>
+      {% endif %}
+
+      <script>
+          // JavaScript to enable/disable password input based on checkbox state
+        var autoGenerateCheckbox = document.getElementById('autoGenerateCheckbox');
+        var passwordInput = document.getElementById('form2Example2');
+
+        autoGenerateCheckbox.addEventListener('change', function () {
+            passwordInput.disabled = autoGenerateCheckbox.checked;
+            passwordInput.readOnly = autoGenerateCheckbox.checked;
+
+            if (autoGenerateCheckbox.checked) {
+                passwordInput.value = '';  // Clear the password input if auto-generate is checked
+            }
+        });
+      </script>
+      {% if manage_pwd_popup %}
+        <div id="popup" class="alert alert-dismissible fade show" role="alert">
+          <h6>Stored Passwords</h6>
+          <table class="table table-primary">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -47,11 +107,14 @@
                 <td>apple.com</td>
               </tr>
             </tbody>
-          </table>
-    
-    </div>
+        </table>
 
-    
+        <!-- Pop up 'Close' button -->
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+        </div>
+      {% endif %}
+    </div>
 
     {% endblock %}
 </body>

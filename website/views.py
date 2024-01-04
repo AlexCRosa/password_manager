@@ -14,12 +14,19 @@ def index():
 @views.route('/', methods=['GET', 'POST'])
 def main():
     if request.method == 'POST':
+        show_popup = False
         menu_option = request.form['menu_option']
 
         if menu_option == 'password_creator':
             return render_template('password-creator.html', user=current_user)
         elif menu_option == 'new_account':
             return render_template('create-account.html', user=current_user)
+        elif menu_option == 'manage_stored_passwords':
+            show_popup = True
+            return render_template('user-account.html', user=current_user, manage_pwd_popup=show_popup)
+        elif menu_option == 'store_new_password':
+            show_popup = True
+            return render_template('user-account.html', user=current_user, new_pwd_popup=show_popup)
     
     return render_template('index.html', user=current_user)
 
