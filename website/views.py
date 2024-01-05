@@ -49,10 +49,10 @@ def profile():
 # ---------- Manage Password Page ----------
 @views.route('/manage-stored-passwords', methods=['GET', 'POST'])
 @login_required
-def manage_stored_passwords():
-    # Query stored passwords for the current user
-    stored_passwords = Storage.query.filter_by(user_id=current_user.id).all()
-    return render_template('user-account.html', user=current_user, stored_passwords=stored_passwords, manage_pwd_popup=True)
+def manage_stored_passwords():      
+        # Query stored passwords for the current user
+        stored_passwords = Storage.query.filter_by(user_id=current_user.id).all()
+        return render_template('user-account.html', user=current_user, stored_passwords=stored_passwords, manage_pwd_popup=True)
 
 # ---------- Password Creator Page ----------
 from .functions import weak_password_generator, strong_password_generator
@@ -116,3 +116,44 @@ def add_password():
         db.session.commit()
 
         return redirect(url_for('views.profile')) 
+
+# ---------- Delete password button ----------
+@views.route('/delete-password/<int:password_id>', methods=['POST'])
+@login_required
+def delete_password(password_id):
+    # Query the password to be deleted
+    password_to_delete = Storage.query.get_or_404(password_id)
+
+    # Check if the password belongs to the current user
+    if password_to_delete.user_id == current_user.id:
+        # Delete the password from the database
+        db.session.delete(password_to_delete)
+        db.session.commit()
+
+        flash("Password deleted successfully.", "success")
+
+    return redirect(url_for('views.manage_stored_passwords'))
+
+@views.route('/edit-password/<int:password_id>', methods=['GET', 'POST'])
+@login_required
+def edit_password(password_id):
+    password_to_edit = Storage.query.get_or_404(password_id)
+
+    # Check if the password belongs to the current user
+    if password_to_edit.user_id == current_user.id:
+        if request.method == 'POST':
+            # Handle form submission to update the password details
+            password_to_edit.username = request.form['edit_username']
+            password_to_edit.password = request.form['edit_password']
+            password_to_edit.website = request.form['edit_website']
+
+            # Commit the changes to the database
+            db.session.commit()
+
+            flash("Password updated successfully.", "success")
+
+            return redirect(url_for('views.manage_stored_passwords'))
+        
+        return render_template('edit-password.html', password=password_to_edit, user=current_user)
+    
+    return redirect(url_for('views.index'))

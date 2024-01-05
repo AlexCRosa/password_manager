@@ -7,6 +7,7 @@
 
     {% extends "base.html" %}
     {% block title %}My Account Page{% endblock %}
+
 </head>
 <body>
     {% block content %}
@@ -29,83 +30,99 @@
         <!-- Manage Passwords -->
         {% if manage_pwd_popup %}
         <div id="popup" class="alert alert-dismissible fade show" role="alert">
-          <h6>Stored Passwords</h6>
-          <table class="table table-primary">          
-            <thead>
-              <tr>
-                  <th>Username</th>
-                  <th>Password</th>
-                  <th>Website</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for password in stored_passwords %}
+            <h6>Stored Passwords</h6>
+            <table class="table table-primary">          
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Website</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for password in stored_passwords %}
                     <tr>
                         <td>{{ password.username }}</td>
                         <td>{{ password.password }}</td>
                         <td>{{ password.website }}</td>
+                        <td>
+                          
+                          <form method="POST" action="{{ url_for('views.delete_password', password_id=password.id) }}">
+                            
+                            <!-- Edit button -->
+                            <a href="{{ url_for('views.edit_password', password_id=password.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            
+                            <!-- Delete button -->
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            
+                          </form>
+                        </td>
                     </tr>
-                {% endfor %}
-            </tbody>                       
-          </table>
-
-          <!-- Pop up 'Close' button -->
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-
-        </div>
-      {% endif %}
-      
-      <!-- Add New Password -->
-      {% if new_pwd_popup %}
-        <div id="popup" class="alert alert-dismissible fade show" role="alert">
-          <form action="{{ url_for('views.add_password') }}" method="POST">
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-              <label class="form-label" for="form2Example1">Username</label>
-              <input type="text" id="form2Example1" class="form-control" name="username"/>
-            </div>
-          
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-              <label class="form-label" for="form2Example2">Password</label>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="autoGenerateCheckbox" name="auto_generate" value="yes">
-                    <label class="form-check-label" for="autoGenerateCheckbox">
-                        Auto Generate Password
-                    </label>
-              </div><br>
-              <input type="password" id="form2Example2" class="form-control" name="password"/>
-            </div>
-
-            <!-- Website/URL input -->
-            <div class="form-outline mb-4">
-              <label class="form-label" for="form2Example2">Website</label><em style="color: grey"> (Optional)</em>
-              <input type="text" id="form2Example2" class="form-control" name="website"/>
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>
-
+                    {% endfor %}
+                </tbody>                       
+            </table>
             <!-- Pop up 'Close' button -->
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </form>
         </div>
-      {% endif %}
+        {% endif %}
 
-      <script>
-          // JavaScript to enable/disable password input based on checkbox state
-        var autoGenerateCheckbox = document.getElementById('autoGenerateCheckbox');
-        var passwordInput = document.getElementById('form2Example2');
+      
+        <!-- Add New Password -->
+        {% if new_pwd_popup %}
+          <div id="popup" class="alert alert-dismissible fade show" role="alert">
+            <form action="{{ url_for('views.add_password') }}" method="POST">
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="form2Example1">Username</label>
+                <input type="text" id="form2Example1" class="form-control" name="username"/>
+              </div>
+            
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="form2Example2">Password</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="autoGenerateCheckbox" name="auto_generate" value="yes">
+                      <label class="form-check-label" for="autoGenerateCheckbox">
+                          Auto Generate Password
+                      </label>
+                </div><br>
+                <input type="password" id="form2Example2" class="form-control" name="password"/>
+              </div>
 
-        autoGenerateCheckbox.addEventListener('change', function () {
-            passwordInput.disabled = autoGenerateCheckbox.checked;
-            passwordInput.readOnly = autoGenerateCheckbox.checked;
+              <!-- Website/URL input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="form2Example2">Website</label><em style="color: grey"> (Optional)</em>
+                <input type="text" id="form2Example2" class="form-control" name="website"/>
+              </div>
 
-            if (autoGenerateCheckbox.checked) {
-                passwordInput.value = '';  // Clear the password input if auto-generate is checked
-            }
-        });
-      </script>
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>
+
+              <!-- Pop up 'Close' button -->
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </form>
+          </div>
+        {% endif %}
+
+        <script>
+          
+          // Enable/disable password input based on checkbox state
+          var autoGenerateCheckbox = document.getElementById('autoGenerateCheckbox');
+          var passwordInput = document.getElementById('form2Example2');
+
+          if (autoGenerateCheckbox) {
+              autoGenerateCheckbox.addEventListener('change', function () {
+                  passwordInput.disabled = autoGenerateCheckbox.checked;
+                  passwordInput.readOnly = autoGenerateCheckbox.checked;
+
+                  if (autoGenerateCheckbox.checked) {
+                      passwordInput.value = '';  // Clear the password input if auto-generate is checked
+                  }
+              });
+          }
+
+        </script>
 
     </div>
 
