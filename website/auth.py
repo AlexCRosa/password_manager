@@ -12,13 +12,19 @@ def login():
     if request.method == 'POST':
         email = request.form.get('username')
         password = request.form.get('password')
+        remember_me = request.form.get('remember_me', 'no')
 
         user = Users.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                flash("Login Succesful.", "success")
-                login_user(user, remember=False, duration=None) # 'remember=True' = Keeps the user logged in even after the window is closed
-                return redirect(url_for('views.profile'))
+                if remember_me == "yes": # Handle the "remember me" feature
+                    flash("Login Succesful.", "success")
+                    login_user(user, remember=True) # Keeps the user logged in even after the window is closed
+                    return redirect(url_for('views.profile'))
+                elif remember_me == "no":
+                    flash("Login Succesful.", "success")
+                    login_user(user, remember=False, duration=None)
+                    return redirect(url_for('views.profile'))
             else:
                 flash("Incorrect password.", "warning")
         else:
